@@ -560,7 +560,7 @@ netsh advfirewall set currentprofile logging droppedconnections enable
 ::
 :: Block all inbound connections on Public profile
 :: ---------------------
-netsh advfirewall set publicprofile firewallpolicy blockinboundalways,allowoutbound
+:: commenting out for azure remote access - netsh advfirewall set publicprofile firewallpolicy blockinboundalways,allowoutbound
 ::
 ::Disable AutoRun
 :: ---------------------
