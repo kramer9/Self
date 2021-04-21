@@ -436,7 +436,7 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Con
 :: Disable solicited remote assistance
 :: reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fAllowToGetHelp /t REG_DWORD /d 0 /f **DK
 :: Require encrypted RPC connections to Remote Desktop
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fEncryptRPCTraffic /t REG_DWORD /d 1 /f
+:: reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fEncryptRPCTraffic /t REG_DWORD /d 1 /f **DK commenting out to prevent oracle encryption error
 :: Prevent sharing of local drives via Remote Desktop Session Hosts
 ::reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fDisableCdm /t REG_DWORD /d 1 /f
 :: 
@@ -560,7 +560,7 @@ netsh advfirewall set currentprofile logging droppedconnections enable
 ::
 :: Block all inbound connections on Public profile
 :: ---------------------
-:: commenting out for azure remote access - netsh advfirewall set publicprofile firewallpolicy blockinboundalways,allowoutbound
+:: netsh advfirewall set publicprofile firewallpolicy blockinboundalways,allowoutbound *DK  commenting out for azure remote access - 
 ::
 ::Disable AutoRun
 :: ---------------------
