@@ -109,6 +109,7 @@ powershell.exe Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\L
 setx /M MP_FORCE_USE_SANDBOX 1
 :: Update signatures
 "%ProgramFiles%"\"Windows Defender"\MpCmdRun.exe -SignatureUpdate
+pause
 :: Enable Defender signatures for Potentially Unwanted Applications (PUA)
 powershell.exe Set-MpPreference -PUAProtection enable
 :: https://docs.microsoft.com/en-us/powershell/module/defender/set-mppreference?view=win10-ps
