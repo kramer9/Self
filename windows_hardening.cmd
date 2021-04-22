@@ -109,7 +109,6 @@ powershell.exe Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\L
 setx /M MP_FORCE_USE_SANDBOX 1
 :: Update signatures
 "%ProgramFiles%"\"Windows Defender"\MpCmdRun.exe -SignatureUpdate
-pause
 :: Enable Defender signatures for Potentially Unwanted Applications (PUA)
 powershell.exe Set-MpPreference -PUAProtection enable
 :: https://docs.microsoft.com/en-us/powershell/module/defender/set-mppreference?view=win10-ps
@@ -310,6 +309,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters" /v Rest
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLUA /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableVirtualization /t REG_DWORD /d 1 /f
 :: reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v ConsentPromptBehaviorAdmin /t REG_DWORD /d 2 /f
+pause
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments" /v SaveZoneInformation /t REG_DWORD /d 2 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v NoDataExecutionPrevention /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v NoHeapTerminationOnCorruption /t REG_DWORD /d 0 /f
