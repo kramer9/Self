@@ -2,7 +2,7 @@
 
 # CMD ["/bin/echo", "hello world"]
 
-FROM debian:latest AS build
+FROM ubuntu:latest AS build
 
 RUN apt-get update && apt-get install -y curl bzip2 gawk git gnupg libpcsclite-dev
 
