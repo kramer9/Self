@@ -6,9 +6,9 @@ FROM debian:latest AS build
 
 RUN apt-get update && apt-get install -y curl bzip2 gawk git gnupg libpcsclite-dev
 
-# ENV MONERO_VERSION=0.17.1.9.latest
+ENV MONERO_VERSION=0.17.1.9.latest
 
-WORKINGDIR /root
+WORKDIR /root
 
 RUN useradd -ms /bin/bash monero && mkdir -p /home/monero/.bitmonero && chown -R monero:monero /home/monero/.bitmonero
 USER monero
