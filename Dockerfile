@@ -1,6 +1,6 @@
-FROM ubuntu:latest
+# FROM ubuntu:latest
 
-CMD ["/bin/echo", "hello world"]
+# CMD ["/bin/echo", "hello world"]
 
 FROM debian:latest AS build
 
@@ -12,7 +12,7 @@ WORKDIR /root
 
 RUN useradd -ms /bin/bash monero && mkdir -p /home/monero/.bitmonero && chown -R monero:monero /home/monero/.bitmonero
 USER monero
-WORKINGDIR /home/monero
+WORKDIR /home/monero
 
 RUN wget https://downloads.rclone.org/rclone-current-linux-amd64.deb --no-check-certificate && \
   ls -ltr 
