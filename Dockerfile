@@ -1,11 +1,8 @@
-export DOCKER_BUILDKIT=0
-export COMPOSE_DOCKER_CLI_BUILD=0
+FROM ubuntu:latest
 
-# FROM ubuntu:latest
+CMD ["/bin/echo", "hello world"]
 
-# CMD ["/bin/echo", "hello world"]
-
-FROM ubuntu:latest AS build
+FROM debian:latest AS build
 
 RUN apt-get update && apt-get install -y curl bzip2 gawk git gnupg libpcsclite-dev
 
