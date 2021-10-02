@@ -25,4 +25,4 @@ RUN useradd -ms /bin/bash monero && \
 USER monero
 WORKDIR /home/monero
 
-run rclone mount pcloud:/chain /home/monero/chain
+# run rclone mount pcloud:/chain /home/monero/chain
