@@ -4,7 +4,7 @@
 
 FROM debian:latest AS build
 
-RUN apt-get update && apt-get install -y rclone curl bzip2 gawk git gnupg libpcsclite-dev wget
+RUN apt-get update && apt-get install -y curl bzip2 gawk git gnupg libpcsclite-dev wget
 
 ENV MONERO_VERSION=0.17.1.9.latest
 
