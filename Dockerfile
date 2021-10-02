@@ -15,5 +15,5 @@ USER monero
 WORKDIR /home/monero
 
 RUN wget https://downloads.rclone.org/rclone-current-linux-amd64.deb --no-check-certificate && \
-  ls -ltr 
+  dpkg -i rclone-current-linux-amd64.deb 
 
