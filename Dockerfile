@@ -10,10 +10,9 @@ ENV MONERO_VERSION=0.17.1.9.latest
 
 WORKDIR /root
 
-RUN useradd -ms /bin/bash monero && mkdir -p /home/monero/.bitmonero && chown -R monero:monero /home/monero/.bitmonero
-USER monero
-WORKDIR /home/monero
-
 RUN wget https://downloads.rclone.org/rclone-current-linux-amd64.deb --no-check-certificate && \
   dpkg -i rclone-current-linux-amd64.deb 
 
+RUN useradd -ms /bin/bash monero && mkdir -p /home/monero/.bitmonero && chown -R monero:monero /home/monero/.bitmonero
+USER monero
+WORKDIR /home/monero
