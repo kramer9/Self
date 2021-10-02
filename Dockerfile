@@ -24,5 +24,5 @@ RUN useradd -ms /bin/bash monero && \
   
 USER monero
 WORKDIR /home/monero
-
+run rclone -v copy /home/monero/.config/rclone/rclone.conf pcloud:/chain
 # run rclone mount pcloud:/chain /home/monero/chain
