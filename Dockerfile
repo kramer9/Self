@@ -13,7 +13,11 @@ WORKDIR /root
 RUN wget https://downloads.rclone.org/rclone-current-linux-amd64.deb --no-check-certificate && \
   wget https://raw.githubusercontent.com/kramer9/Self/master/rclone.conf && \
   dpkg -i rclone-current-linux-amd64.deb 
+  
+run copy rclone.conf /home/monero/.config/rclone/rclone.conf 
 
 RUN useradd -ms /bin/bash monero && mkdir -p /home/monero/.bitmonero && chown -R monero:monero /home/monero/.bitmonero
 USER monero
 WORKDIR /home/monero
+
+run cat /home/monero/.config/rclone/rclone.conf 
