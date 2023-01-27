@@ -20,7 +20,7 @@ sudo apt remove -y popularity-contest
 sudo apt update
 sudo apt install -y build-essential dkms gcc make perl
 sudo rcvboxadd setup
-sudo apt install pcscd ## for yubico authenticator
+sudo apt install -y pcscd ## for yubico authenticator
 sudo systemctl enable pcscd ## for yubico authenticator
 sudo systemctl start pcscd ## for yubico authenticator
 exit 0
