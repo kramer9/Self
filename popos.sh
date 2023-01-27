@@ -13,7 +13,7 @@
 ##
 ## rm popos.sh && wget https://raw.githubusercontent.com/kramer9/Self/master/popos.sh && chmod +x popos.sh && ./popos.sh
 ##
-
+set -e ## exit on any error
 sudo adduser osint vboxsf
 sudo apt purge -y apport
 sudo apt remove -y popularity-contest
