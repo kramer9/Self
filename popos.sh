@@ -18,7 +18,7 @@ set -e ## exit on any error
 sudo apt purge -y apport
 sudo apt remove -y popularity-contest
 sudo apt remove 
-sudo apt update
+sudo apt update -y && sudo apt upgrade -y
 sudo apt install -y build-essential dkms gcc make perl
 sudo rcvboxadd setup
 sudo apt install -y pcscd ## for yubico authenticator
