@@ -11,7 +11,7 @@
 ## Full license information and restrictions at https://inteltechniques.com/osintbook9/license.txt
 
 ##
-## wget https://raw.githubusercontent.com/kramer9/Self/master/popos.sh && chmod +x popos.sh && ./popos.sh
+## rm popos.sh && wget https://raw.githubusercontent.com/kramer9/Self/master/popos.sh && chmod +x popos.sh && ./popos.sh
 ##
 
 sudo adduser osint vboxsf
