@@ -20,7 +20,7 @@ sudo apt remove -y popularity-contest
 sudo apt update
 sudo apt install -y build-essential dkms gcc make perl
 sudo rcvboxadd setup
-exit
+exit 0
 sudo snap install vlc
 sudo apt install -y ffmpeg
 sudo apt install -y python3-pip
