@@ -14,12 +14,15 @@
 ## rm popos.sh && wget https://raw.githubusercontent.com/kramer9/Self/master/popos.sh && chmod +x popos.sh && ./popos.sh
 ##
 set -e ## exit on any error
-sudo adduser osint vboxsf
+## sudo adduser osint vboxsf
 sudo apt purge -y apport
 sudo apt remove -y popularity-contest
 sudo apt update
 sudo apt install -y build-essential dkms gcc make perl
 sudo rcvboxadd setup
+sudo apt install pcscd ## for yubico authenticator
+sudo systemctl enable pcscd ## for yubico authenticator
+sudo systemctl start pcscd ## for yubico authenticator
 exit 0
 sudo snap install vlc
 sudo apt install -y ffmpeg
