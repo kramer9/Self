@@ -9,12 +9,18 @@
 ## These instructions are provided 'as is' without warranty of any kind
 ## In no event shall the copyright holder be liable for any claim, damages or other liability
 ## Full license information and restrictions at https://inteltechniques.com/osintbook9/license.txt
+
+##
+## wget https://raw.githubusercontent.com/kramer9/Self/master/popos.sh && chmod +x popos.sh && ./popos.sh
+##
+
 sudo adduser osint vboxsf
 sudo apt purge -y apport
 sudo apt remove -y popularity-contest
 sudo apt update
 sudo apt install -y build-essential dkms gcc make perl
 sudo rcvboxadd setup
+exit
 sudo snap install vlc
 sudo apt install -y ffmpeg
 sudo apt install -y python3-pip
