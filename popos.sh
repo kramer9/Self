@@ -25,8 +25,8 @@ sudo systemctl enable pcscd ## for yubico authenticator
 sudo systemctl start pcscd ## for yubico authenticator
 echo '######'
 echo '## install apps ##'
-secho '######'
-udo apt install -y khotkeys ## needed for flameshot
+echo '######'
+sudo apt install -y khotkeys ## needed for flameshot
 flatpak list
 flatpak update -y
 ## flatpak uninstall org.gimp.GIMP
@@ -39,7 +39,7 @@ sudo add-apt-repository universe
 sudo apt install libfuse2
 wget https://raw.githubusercontent.com/kramer9/Self/master/pcloud
 chmod +x pcloud 
-./pcloud
+pcloud
 
 
 exit 0
