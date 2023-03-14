@@ -5,8 +5,9 @@
 set -e ## exit on any error
 ## sudo adduser osint vboxsf
 ##
-## remove image stuff
-##
+echo '######'
+echo '## remove image stuff ##'
+echo '######'
 sudo apt purge -y apport
 sudo apt remove -y popularity-contest
 sudo apt remove -y --purge libreoffice* ## remove libre in favor of onlyoffice
@@ -16,28 +17,28 @@ sudo apt remove
 sudo apt update -y && sudo apt upgrade -y
 sudo apt install -y build-essential dkms gcc make perl
 sudo rcvboxadd setup
-
-##
-## yubico stuff
-##
+echo '######'
+echo '## yubico stuff ##'
+echo '######'
 sudo apt install -y pcscd ## for yubico authenticator
 sudo systemctl enable pcscd ## for yubico authenticator
 sudo systemctl start pcscd ## for yubico authenticator
-
-##
-## install apps
-##
-sudo apt install -y khotkeys ## needed for flameshot
+echo '######'
+echo '## install apps ##'
+secho '######'
+udo apt install -y khotkeys ## needed for flameshot
 flatpak list
 flatpak update -y
 ## flatpak uninstall org.gimp.GIMP
 ##flatpak install flathub io.atom.Atom org.audacityteam.Audacity com.calibre_ebook.calibre org.gnome.DejaDup org.gnome.EasyTAG org.electrum.electrum  im.riot.Riot org.mozilla.firefox org.freefilesync.FreeFileSync org.gimp.GIMP org.gnucash.GnuCash fr.handbrake.ghb org.keepassxc.KeePassXC tv.kodi.Kodi com.getmailspring.Mailspring com.gitlab.newsflash org.onlyoffice.desktopeditors ch.protonmail.protonmail-bridge org.signal.Signal org.standardnotes.standardnotes com.github.micahflee.torbrowser-launcher com.transmissionbt.Transmission org.videolan.VLC com.wire.WireDesktop -y
 flatpak install flathub com.calibre_ebook.calibre org.mozilla.firefox fr.handbrake.ghb org.onlyoffice.desktopeditors com.github.micahflee.torbrowser-launcher com.transmissionbt.Transmission org.videolan.VLC com.yubico.yubioath com.visualstudio.code org.flameshot.Flameshot bitwarden -y
-## pcloud
+echo '######'
+echo '## pcloud ##'
+echo '######'
 sudo add-apt-repository universe
 sudo apt install libfuse2
 wget https://raw.githubusercontent.com/kramer9/Self/master/pcloud
-chod +x pcloud 
+chmod +x pcloud 
 ./pcloud
 
 
