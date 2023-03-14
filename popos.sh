@@ -1,35 +1,33 @@
 #!/usr/bin/env bash
-## Updated: Updated: October 30, 2022
-## For use ONLY with Ubuntu 22.04
-## These will assist with the creation of your custom machine and will be updated as things change
-## Full usage details are available in the book: https://inteltechniques.com/book1.html
-## Slight variations may be present for Windows/Mac users (such as 'Next' vs. 'Continue')
-## Please send any issues to errors@inteltechniques.com
-## Copyright 2022 Michael Bazzell
-## These instructions are provided 'as is' without warranty of any kind
-## In no event shall the copyright holder be liable for any claim, damages or other liability
-## Full license information and restrictions at https://inteltechniques.com/osintbook9/license.txt
-
 ##
 ## rm popos.sh && wget https://raw.githubusercontent.com/kramer9/Self/master/popos.sh && chmod +x popos.sh && ./popos.sh
 ##
 set -e ## exit on any error
 ## sudo adduser osint vboxsf
+##
+## remove image stuff
+##
 sudo apt purge -y apport
 sudo apt remove -y popularity-contest
+sudo apt remove -y --purge libreoffice* ## remove libre in favor of onlyoffice
+sudo apt-get clean -y
+sudo apt-get autoremove -y
 sudo apt remove 
 sudo apt update -y && sudo apt upgrade -y
 sudo apt install -y build-essential dkms gcc make perl
 sudo rcvboxadd setup
+
+##
+## yubico stuff
+##
 sudo apt install -y pcscd ## for yubico authenticator
 sudo systemctl enable pcscd ## for yubico authenticator
 sudo systemctl start pcscd ## for yubico authenticator
 
+##
+## install apps
+##
 sudo apt install -y khotkeys ## needed for flameshot
-
-sudo apt remove -y --purge libreoffice* ## remove libre in favor of onlyoffice
-sudo apt-get clean -y
-sudo apt-get autoremove -y
 flatpak list
 flatpak update -y
 ## flatpak uninstall org.gimp.GIMP
