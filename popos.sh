@@ -36,7 +36,9 @@ flatpak install flathub com.calibre_ebook.calibre org.mozilla.firefox fr.handbra
 ## pcloud
 sudo add-apt-repository universe
 sudo apt install libfuse2
-wget wget https://raw.githubusercontent.com/kramer9/Self/master/
+wget https://raw.githubusercontent.com/kramer9/Self/master/pcloud
+chod +x pcloud 
+./pcloud
 
 
 exit 0
