@@ -31,7 +31,20 @@ flatpak list
 flatpak update -y
 ## flatpak uninstall org.gimp.GIMP
 ##flatpak install flathub io.atom.Atom org.audacityteam.Audacity com.calibre_ebook.calibre org.gnome.DejaDup org.gnome.EasyTAG org.electrum.electrum  im.riot.Riot org.mozilla.firefox org.freefilesync.FreeFileSync org.gimp.GIMP org.gnucash.GnuCash fr.handbrake.ghb org.keepassxc.KeePassXC tv.kodi.Kodi com.getmailspring.Mailspring com.gitlab.newsflash org.onlyoffice.desktopeditors ch.protonmail.protonmail-bridge org.signal.Signal org.standardnotes.standardnotes com.github.micahflee.torbrowser-launcher com.transmissionbt.Transmission org.videolan.VLC com.wire.WireDesktop -y
-flatpak install flathub com.calibre_ebook.calibre org.mozilla.firefox fr.handbrake.ghb org.onlyoffice.desktopeditors com.github.micahflee.torbrowser-launcher com.transmissionbt.Transmission org.videolan.VLC com.yubico.yubioath com.visualstudio.code org.flameshot.Flameshot bitwarden -y
+flatpak install flathub com.calibre_ebook.calibre org.mozilla.firefox fr.handbrake.ghb org.onlyoffice.desktopeditors com.github.micahflee.torbrowser-launcher com.transmissionbt.Transmission org.videolan.VLC com.yubico.yubioath org.flameshot.Flameshot bitwarden -y
+echo '######'
+echo '## vistudio ##'
+echo '######'
+git config --global user.name "kramer9"
+git config --global user.email "kramer92002@gmail.com"
+sudo apt-get install wget gpg
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+rm -f packages.microsoft.gpg
+sudo apt install apt-transport-https
+sudo apt update
+sudo apt install code # or code-insiders
 echo '######'
 echo '## pcloud ##'
 echo '######'
