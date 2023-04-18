@@ -31,8 +31,10 @@ flatpak list
 flatpak update -y
 ## flatpak uninstall org.gimp.GIMP
 ##flatpak install flathub io.atom.Atom org.audacityteam.Audacity com.calibre_ebook.calibre org.gnome.DejaDup org.gnome.EasyTAG org.electrum.electrum  im.riot.Riot org.mozilla.firefox org.freefilesync.FreeFileSync org.gimp.GIMP org.gnucash.GnuCash fr.handbrake.ghb org.keepassxc.KeePassXC tv.kodi.Kodi com.getmailspring.Mailspring com.gitlab.newsflash org.onlyoffice.desktopeditors ch.protonmail.protonmail-bridge org.signal.Signal org.standardnotes.standardnotes com.github.micahflee.torbrowser-launcher com.transmissionbt.Transmission org.videolan.VLC com.wire.WireDesktop -y
-flatpak install flathub \ 
-                com.calibre_ebook.calibre org.mozilla.firefox org.freefilesync.FreeFileSync \
+flatpak install flathub
+                com.calibre_ebook.calibre 
+                org.mozilla.firefox 
+                org.freefilesync.FreeFileSync
                 fr.handbrake.ghb org.onlyoffice.desktopeditors com.github.micahflee.torbrowser-launcher com.transmissionbt.Transmission org.videolan.VLC com.yubico.yubioath org.flameshot.Flameshot bitwarden -y
 echo '######'
 echo '## vistudio ##'
