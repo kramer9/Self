@@ -1,0 +1,34 @@
+- name: ipsecrocks
+  hosts: RHEL79
+  tasks:
+    - name: test step
+      yum:
+        name: nano
+        state: latest
+        name: install dependencies
+      yum:
+        name:
+          - traceroute
+          - strongswan
+          - rng-tools
+        state: latest
+        update_cache: true
+
+#do all the systemctl work
+tasks:
+    - name: start daemons
+      become: true 
+      systemd:
+        name: rngd
+        enabled: yes
+        state: started
+
+# modify conf files
+tasks: 
+    - lineinfile:
+        path: /etc/strongswan/strongswan.d/charon/duplicheck.conf
+        regexp: 'load = yes'
+        line: '    load = no'
+        state: present
+
+    # stoping at 2130 in video
