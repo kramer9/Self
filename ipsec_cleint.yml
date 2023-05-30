@@ -15,7 +15,7 @@
         update_cache: true
 
 #do all the systemctl work
-tasks:
+  tasks:
     - name: start daemons
       become: true 
       systemd:
@@ -24,11 +24,76 @@ tasks:
         state: started
 
 # modify conf files
-tasks: 
+  tasks: 
     - lineinfile:
         path: /etc/strongswan/strongswan.d/charon/duplicheck.conf
         regexp: 'load = yes'
         line: '    load = no'
         state: present
+        backup: yes
 
-    # stoping at 2130 in video
+# stoping at 2130 in video
+#    - blockinfile:
+#        path: /etc/strongswan/strongswan.d/charon.conf
+#        marker: "{mark}"
+#        marker_begin: "    start-scripts {"
+#        marker_end: "}"
+#        block: |-
+#           swanctl = /usr/sbin/swanctl --load-all
+#        state: present
+#        backup: yes
+    - name: Updating charon.conf
+      lineinfile:
+        path: /etc/strongswan/strongswan.d/charon.conf
+        regexp: "    start-scripts {"
+        insertafter: "    start-scripts {"
+        line: '    start-scripts {swanctl = /usr/sbin/swanctl --load-all'
+        backup: yes
+
+    - name: Updating charon.conf
+      lineinfile:
+        path: /etc/strongswan/strongswan.d/charon.conf
+        regexp: '# make_before_break = no'
+        line: '    make_before_break = yes'
+        state: present
+        backup: yes
+
+#policy name, including case MUST mactch what is on the filer
+    - name: Creating .conf file
+      copy:
+        dest: "/etc/strongswan/swanctl/conf.d/pol5.conf"
+        content: |
+         connections { 
+            Ipsec_pol5 {
+                children { 
+                    pol_rhel7_nfs_client { 
+                        esp_proposals = aes256-sha512 
+                        mode = transport 
+                        start_action = trap 
+                        local_ts = 172.20.224.49/32[any/any] 
+                        remote_ts = 172.16.166.27/32[any/any] 
+                        rekey_time = 3600 rekey_bytes = 0
+                    }
+                } 
+                keyingtries = 3 
+                version = 2 
+                local_addrs = 172.20.224.49/32 
+                remote_addrs = 172.16.166.27/32 
+                rekey_time = 1200 
+                proposals = aes256-sha512-modp4096 
+                local { 
+                    auth = psk 
+                    id = 172.20.224.49/32 
+                } 
+                remote { 
+                    auth = psk 
+                    id = 172.16.166.27/32 
+                } 
+            } 
+         } 
+         secrets { 
+             ike-Ipsec_pol5 { 
+                secret = iwantipsec2work1!23
+                id = 172.16.166.27/32 
+             }
+         }
