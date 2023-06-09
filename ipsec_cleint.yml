@@ -1,48 +1,43 @@
 - name: ipsecrocks
   hosts: RHEL79
+# sudo yum install traceroute
+#         sudo yum install strongswan-sqlite
+#         sudo yum install rng-tools
   tasks:
     - name: test step
       yum:
         name: nano
         state: latest
-        name: install dependencies
+
+    - name: install dependencies
       yum:
         name:
           - traceroute
-          - strongswan
+          - strongswan-sqlite
           - rng-tools
         state: latest
         update_cache: true
 
 #do all the systemctl work
-  tasks:
+#         sudo systemctl enable rngd
+#         sudo systemctl start rngd
     - name: start daemons
-      become: true 
+      become: true
       systemd:
         name: rngd
         enabled: yes
         state: started
 
 # modify conf files
-  tasks: 
-    - lineinfile:
+    - name: Update the duplicheck.conf file
+      lineinfile:
         path: /etc/strongswan/strongswan.d/charon/duplicheck.conf
         regexp: 'load = yes'
         line: '    load = no'
         state: present
         backup: yes
 
-# stoping at 2130 in video
-#    - blockinfile:
-#        path: /etc/strongswan/strongswan.d/charon.conf
-#        marker: "{mark}"
-#        marker_begin: "    start-scripts {"
-#        marker_end: "}"
-#        block: |-
-#           swanctl = /usr/sbin/swanctl --load-all
-#        state: present
-#        backup: yes
-    - name: Updating charon.conf
+    - name: Update the charon.conf file
       lineinfile:
         path: /etc/strongswan/strongswan.d/charon.conf
         regexp: "    start-scripts {"
@@ -50,7 +45,7 @@
         line: '    start-scripts {swanctl = /usr/sbin/swanctl --load-all'
         backup: yes
 
-    - name: Updating charon.conf
+    - name: Update the charon.conf file p2
       lineinfile:
         path: /etc/strongswan/strongswan.d/charon.conf
         regexp: '# make_before_break = no'
@@ -59,41 +54,52 @@
         backup: yes
 
 #policy name, including case MUST mactch what is on the filer
-    - name: Creating .conf file
+    - name: Creating conf.d file
       copy:
         dest: "/etc/strongswan/swanctl/conf.d/pol5.conf"
         content: |
-         connections { 
+         connections {
             Ipsec_pol5 {
-                children { 
-                    pol_rhel7_nfs_client { 
-                        esp_proposals = aes256-sha512 
-                        mode = transport 
-                        start_action = trap 
-                        local_ts = 172.20.224.49/32[any/any] 
-                        remote_ts = 172.16.166.27/32[any/any] 
-                        rekey_time = 3600 rekey_bytes = 0
+                children {
+                    pol_rhel7_nfs_client {
+                        esp_proposals = aes256-sha512
+                        mode = transport
+                        start_action = trap
+                        local_ts = 172.20.224.49/32[any/any]
+                        remote_ts = 172.16.166.27/32[any/any]
+                        rekey_time = 3600
+                        rekey_bytes = 0
                     }
-                } 
-                keyingtries = 3 
-                version = 2 
-                local_addrs = 172.20.224.49/32 
-                remote_addrs = 172.16.166.27/32 
-                rekey_time = 1200 
-                proposals = aes256-sha512-modp4096 
-                local { 
-                    auth = psk 
-                    id = 172.20.224.49/32 
-                } 
-                remote { 
-                    auth = psk 
-                    id = 172.16.166.27/32 
-                } 
-            } 
-         } 
-         secrets { 
-             ike-Ipsec_pol5 { 
+                }
+                keyingtries = 3
+                version = 2
+                local_addrs = 172.20.224.49/32
+                remote_addrs = 172.16.166.27/32
+                rekey_time = 1200
+                proposals = aes256-sha512-modp4096
+                local {
+                    auth = psk
+                    id = 172.20.224.49/32
+                }
+                remote {
+                    auth = psk
+                    id = 172.16.166.27/32
+                }
+            }
+         }
+         secrets {
+             ike-Ipsec_pol5 {
                 secret = iwantipsec2work1!23
-                id = 172.16.166.27/32 
+                id = 172.16.166.27/32
              }
          }
+
+    - name: Update /usr/lib/systemd/system/strongswan-swanctl.service
+      blockinfile:
+        path: /usr/lib/systemd/system/strongswan-swanctl.service
+        marker: "Restart=on-abnormal"
+        block: |-
+           RuntimeDirectory=strongswan
+           RuntimeDirectoryMode=0755
+        state: present
+        backup: yes
