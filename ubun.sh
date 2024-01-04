@@ -44,7 +44,7 @@ org.onlyoffice.desktopeditors com.github.micahflee.torbrowser-launcher com.trans
 echo '######'
 echo '## git ##'
 echo '######'
-sudo apt-get install git -y
+sudo apt install git -y
 echo '######'
 echo '## vistudio ##'
 echo '######'
