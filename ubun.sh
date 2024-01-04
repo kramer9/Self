@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ##
-## rm popos.sh && wget https://raw.githubusercontent.com/kramer9/Self/master/ubun.sh && chmod +x ubun.sh && ./ubun.sh
+## rm ubun.sh && wget https://raw.githubusercontent.com/kramer9/Self/master/ubun.sh && chmod +x ubun.sh && ./ubun.sh
 ##
 set -e ## exit on any error
 ## sudo adduser osint vboxsf
@@ -29,7 +29,13 @@ echo '######'
 echo '## install apps ##'
 echo '######'
 #sudo apt install -y khotkeys ## needed for flameshot
-#flatpak list
+echo '######'
+echo '## flatpak stuff ##'
+echo '######'
+sudo apt install flatpak
+sudo apt install gnome-software-plugin-flatpak
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak list
 #flatpak update -y
 ## flatpak uninstall org.gimp.GIMP
 ##flatpak install flathub io.atom.Atom org.audacityteam.Audacity com.calibre_ebook.calibre org.gnome.DejaDup org.gnome.EasyTAG org.electrum.electrum  im.riot.Riot org.mozilla.firefox org.freefilesync.FreeFileSync org.gimp.GIMP org.gnucash.GnuCash fr.handbrake.ghb org.keepassxc.KeePassXC tv.kodi.Kodi com.getmailspring.Mailspring com.gitlab.newsflash org.onlyoffice.desktopeditors ch.protonmail.protonmail-bridge org.signal.Signal org.standardnotes.standardnotes com.github.micahflee.torbrowser-launcher com.transmissionbt.Transmission org.videolan.VLC com.wire.WireDesktop -y
