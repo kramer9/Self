@@ -42,6 +42,10 @@ flatpak list
 flatpak install flathub org.mozilla.firefox org.freefilesync.FreeFileSync fr.handbrake.ghb \
 org.onlyoffice.desktopeditors com.github.micahflee.torbrowser-launcher com.transmissionbt.Transmission org.videolan.VLC bitwarden -y
 echo '######'
+echo '## git ##'
+echo '######'
+sudo apt get install git -y
+echo '######'
 echo '## vistudio ##'
 echo '######'
 git config --global user.name "kramer9"
