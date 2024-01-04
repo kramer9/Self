@@ -6,6 +6,10 @@ set -e ## exit on any error
 ## sudo adduser osint vboxsf
 ##
 echo '######'
+echo '## add drivers for qemu guest support ##'
+echo '######'
+sudo apt-get install spice-vdagent
+echo '######'
 echo '## remove image stuff ##'
 echo '######'
 sudo apt purge -y apport
