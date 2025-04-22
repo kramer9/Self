@@ -31,7 +31,7 @@ SLACK_WEBHOOK_URL=$(sudo podman run --rm --secret slack-webhook alpine cat /run/
 
 # Execute auto-update with enhanced debugging
 log_debug "Running: podman auto-update --format json"
-AUTO_UPDATE_OUTPUT=$(sudo podman auto-update --format json 2>&1)
+AUTO_UPDATE_OUTPUT=$(sudo podman auto-update --dry-run --format json 2>&1)
 UPDATE_RESULT=$?
 log_debug "Raw auto-update output: $AUTO_UPDATE_OUTPUT"
 
