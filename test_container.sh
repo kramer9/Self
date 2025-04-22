@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Usage: sudo ./test_container.sh <container_name> <image:tag>
-# Example: sudo ./test_container.sh test-container nginx:1.23
+# Example: sudo ./test_container.sh test-container nginx:latest
 
 set -euo pipefail
 
@@ -15,59 +15,77 @@ IMAGE="$2"
 UNIT_FILE="container-${CONTAINER_NAME}.service"
 UNIT_PATH="/etc/systemd/system/$UNIT_FILE"
 
-# Clean up previous runs
-if podman container exists "$CONTAINER_NAME"; then
-    podman rm -f "$CONTAINER_NAME"
+for cmd in podman jq; do
+    command -v $cmd >/dev/null 2>&1 || { echo "Error: $cmd not found in PATH"; exit 1; }
+done
+
+# Ensure image is fully qualified for Podman
+if [[ "$IMAGE" != *"/"* ]]; then
+    IMAGE="docker.io/library/$IMAGE"
+    echo "No registry specified, using Docker Hub: $IMAGE"
 fi
+
+if podman container exists "$CONTAINER_NAME"; then
+    echo "Removing previous container $CONTAINER_NAME..."
+    podman rm -f "$CONTAINER_NAME" || { echo "Failed to remove container $CONTAINER_NAME"; exit 1; }
+fi
+
 if [[ -f "$UNIT_PATH" ]]; then
-    systemctl disable --now "$UNIT_FILE" || true
-    rm -f "$UNIT_PATH"
+    echo "Disabling and removing previous systemd unit $UNIT_FILE..."
+    systemctl disable --now "$UNIT_FILE" || echo "Warning: Could not disable $UNIT_FILE"
+    rm -f "$UNIT_PATH" || { echo "Failed to remove $UNIT_PATH"; exit 1; }
     systemctl daemon-reload
 fi
 
-# Pull the latest image for the tag
-podman pull "$IMAGE"
+# Pull the image (first version)
+echo "Pulling initial image $IMAGE..."
+podman pull "$IMAGE" || { echo "Failed to pull image $IMAGE"; exit 1; }
 
-REPO="${IMAGE%%:*}"
-TAG="${IMAGE##*:}"
+# Create the container with the local auto-update policy
+echo "Creating container $CONTAINER_NAME with local auto-update policy..."
+podman run -d --name "$CONTAINER_NAME" --label "io.containers.autoupdate=local" "$IMAGE" || { echo "Failed to create container $CONTAINER_NAME"; exit 1; }
 
-# Get the remote digest for the tag
-REMOTE_DIGEST=$(skopeo inspect docker://docker.io/library/$REPO:$TAG | jq -r .Digest)
-
-# Get all available digests for this repo (multi-arch aware)
-DIGESTS=$(skopeo inspect --raw docker://docker.io/library/$REPO:$TAG | jq -r '.manifests[]?.digest' 2>/dev/null || true)
-
-# Pick an older digest that is NOT the current one
-OLDER_DIGEST=""
-for d in $DIGESTS; do
-    if [[ "$d" != "$REMOTE_DIGEST" ]]; then
-        OLDER_DIGEST="$d"
-        break
-    fi
-done
-
-if [[ -n "$OLDER_DIGEST" ]]; then
-    echo "Pulling and tagging older digest: $OLDER_DIGEST"
-    podman pull "docker.io/library/$REPO@$OLDER_DIGEST"
-    podman rmi "$IMAGE" || true
-    podman tag "docker.io/library/$REPO@$OLDER_DIGEST" "$IMAGE"
-else
-    echo "No older digest found or only one digest available. Proceeding with current image."
+if ! podman container exists "$CONTAINER_NAME"; then
+    echo "Error: Container $CONTAINER_NAME was not created successfully."
+    exit 1
 fi
 
-# Show local and remote digests for verification
-echo "Local image digest for $IMAGE:"
-podman images --digests | grep "$IMAGE"
-echo "Remote digest for $IMAGE:"
-echo "$REMOTE_DIGEST"
+echo "Generating systemd unit file for $CONTAINER_NAME..."
+GENERATED_UNIT_FILE=$(podman generate systemd --name "$CONTAINER_NAME" --files --new | grep '\.service$' | head -n1)
+if [[ ! -f "$GENERATED_UNIT_FILE" ]]; then
+    echo "Error: Systemd unit file $GENERATED_UNIT_FILE was not generated."
+    podman rm -f "$CONTAINER_NAME" || true
+    exit 1
+fi
 
-# Create the container and systemd unit
-podman run -d --name "$CONTAINER_NAME" --label "io.containers.autoupdate=registry" "$IMAGE"
-podman generate systemd --name "$CONTAINER_NAME" --files --new
-podman rm -f "$CONTAINER_NAME"
-mv "$UNIT_FILE" /etc/systemd/system/
+echo "Removing temporary container $CONTAINER_NAME (systemd will manage it)..."
+podman rm -f "$CONTAINER_NAME" || echo "Warning: Could not remove container $CONTAINER_NAME"
+
+echo "Moving unit file $GENERATED_UNIT_FILE to $UNIT_PATH..."
+mv "$GENERATED_UNIT_FILE" "$UNIT_PATH" || { echo "Failed to move unit file to $UNIT_PATH"; exit 1; }
+
+echo "Reloading systemd daemon..."
 systemctl daemon-reload
-systemctl enable --now "$UNIT_FILE"
+
+echo "Enabling and starting systemd unit $UNIT_FILE..."
+systemctl enable --now "$UNIT_FILE" || { echo "Failed to enable/start $UNIT_FILE"; exit 1; }
+
+if ! systemctl is-active --quiet "$UNIT_FILE"; then
+    echo "Error: Systemd unit $UNIT_FILE is not active."
+    systemctl status "$UNIT_FILE"
+    exit 1
+fi
+
+# Simulate a local image update: build a trivial new image and tag it as the same image name
+echo "Simulating a local image update for $IMAGE by building a new image with a different digest..."
+TMP_DOCKERFILE=$(mktemp)
+cat > "$TMP_DOCKERFILE" <<EOF
+FROM $IMAGE
+LABEL testupdate=$(date +%s)
+EOF
+
+podman build -t "$IMAGE" -f "$TMP_DOCKERFILE" . || { echo "Failed to build updated image for $IMAGE"; rm -f "$TMP_DOCKERFILE"; exit 1; }
+rm -f "$TMP_DOCKERFILE"
 
 # Run podman auto-update in dry-run mode and capture output
 echo "===== Podman Auto-Update Findings ====="
@@ -89,4 +107,3 @@ else
     fi
 fi
 echo "======================================="
-
